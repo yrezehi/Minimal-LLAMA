@@ -25,5 +25,11 @@ namespace LLama.Memory
 
         private MemoryMappedFile GetMappedFile(FileStream stream) =>
             MemoryMappedFile.CreateFromFile(stream, null, stream.Length, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+
+        public MemoryMappedViewAccessor ViewAccessor() =>
+            MappedFile.CreateViewAccessor(null, null, MemoryMappedFileAccess.Read);
+
+        public static MemoryFile Create(string pathFile) =>
+            new MemoryFile(pathFile);
     }
 }
