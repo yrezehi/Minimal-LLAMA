@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace LLama.Transformers
 {
-    internal class Transformer
+    public class Transformer
     {
+        public static void Transform()
+        {
+
+        }
     }
 }
