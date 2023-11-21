@@ -2,9 +2,7 @@
 {
 	public static class VocabExtensions
 	{
-		public int FindVocab(this string[] vocab, string @string)
-		{
-
-		}
+		public static int FindVocab(this string[] vocab, string @string) =>
+			vocab.TernarySearch<string>(0, vocab.Length - 1, @string);
 	}
 }
