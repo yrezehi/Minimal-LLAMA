@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace LLama.Layers
 {
-    internal class ResidualConnectioncs
+    public class ResidualConnectioncs
     {
+        public static void Skip(float[] a, float[] b, int size)
+        {
+            for(int index = 0; index < size; index++)
+            {
+                a[index] += b[index];
+            }
+        }
     }
 }
