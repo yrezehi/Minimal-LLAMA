@@ -1,4 +1,5 @@
 ﻿using LLama.Extensions;
+using System.Text;
 
 namespace LLama.Prompts
 {
@@ -18,6 +19,22 @@ namespace LLama.Prompts
 				}
 
 				tokens[tokenLength] = vocabIndex;
+			}
+		}
+
+		public static void MergeConsecutivePairs(string[] vocab)
+		{
+			StringBuilder stringBuffer = new StringBuilder();
+
+			while (true)
+			{
+				float bestScore = float.MinValue;
+
+				for (int index = 0; index < 10; index++)
+				{
+					stringBuffer.Clear();
+					stringBuffer.Append();
+				}
 			}
 		}
 	}
