@@ -16,18 +16,17 @@
 
 				if (value.CompareTo(array[midLeft]) < 0)
 				{
-					return TernarySearch(array, left, right, value);
+					return array.TernarySearch(left, midLeft - 1, value);
 				}
 				else if (value.CompareTo(array[midLeft]) < 0)
 				{
-					return TernarySearch(array, left, right, value);
+					return array.TernarySearch(midRight + 1, right, value);
 				}
 				else
 				{
-					return TernarySearch(array, left, right, value);
+					return array.TernarySearch(midLeft + 1, midRight - 1, value);
 				}
 			}
-
 			return -1;
 		}
 	}

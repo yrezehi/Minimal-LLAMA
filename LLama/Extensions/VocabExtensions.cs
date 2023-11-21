@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LLama.Extensions
+﻿namespace LLama.Extensions
 {
-	internal class VocabExtensions
+	public static class VocabExtensions
 	{
+		public int FindVocab(this string[] vocab, string @string)
+		{
+
+		}
 	}
 }
