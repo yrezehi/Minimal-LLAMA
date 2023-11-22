@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace LLama.Native.Configuration
+namespace LLama.Entities
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct WeightsConfiguration
+    public struct TransformerWeights
     {
         public float[] token_embedding_table; // (vocab_size, dim)
         public ArraySegment<float> rms_att_weight; // (layer, dim) rmsnorm weights

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LLama.Memory;
 
 namespace LLama.Models
 {
-    internal class InitialWeights
+    public static class InitialWeights
     {
+        public static void Initialize(this MemoryFile memoryFile)
+        {
+            long offset;
+
+            memoryFile.Read(ref offset);
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace LLama.Configuration
+﻿namespace LLama.Entities
 {
-    public struct RoPEConfiguration
+    public struct RoPE
     {
         public float q0;
         public float q1;

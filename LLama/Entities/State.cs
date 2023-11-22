@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace LLama.Configuration
+namespace LLama.Entities
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct State

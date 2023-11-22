@@ -9,6 +9,5 @@
 
 		public static InferenceConfiguration Create() =>
 			new InferenceConfiguration();
-
 	}
 }
