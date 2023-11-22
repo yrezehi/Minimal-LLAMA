@@ -103,8 +103,14 @@ namespace LLama.Transformers
                     state.hb[currentIndex] *= state.hb2[currentIndex];
                 }
 
+                Matmul.Multiple(state.xb, state.hb, weights.w2[(index * configuration.dim * configuration.hidden_dim)..], configuration.hidden_dim, configuration.dim);
 
+                ResidualConnectioncs.Skip(state.x, state.xb, configuration.dim);
             }
+
+            RMSNorm.Normailize(state.x, state.x, weights.rms_final_weight, configuration.dim);
+
+            Matmul.Multiple(state.logits, state.x, weights.wcls, configuration.dim, configuration.vocab_size);
         }
     }
 }
