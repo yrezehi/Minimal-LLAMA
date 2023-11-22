@@ -1,12 +1,6 @@
-﻿using LLama.Configuration;
-using LLama.Entities;
+﻿using LLama.Entities;
 using LLama.Layers;
 using LLama.Native.Configuration.Native;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LLama.Transformers
 {
@@ -20,14 +14,14 @@ namespace LLama.Transformers
 
             for (int index = 0; index < configuration.n_layers; index++)
             {
-                RMSNorm.Normailize(new ArraySegment<float>(), new float[1], new float[1], 10);
+                RMSNorm.Normailize(weights.rms_att_weight[(index * configuration.dim)..], state.xb, state.x, configuration.dim);
 
-                Matmul.Multiple(new float[1], new float[2], new ArraySegment<float>(), 0, 2);
-                Matmul.Multiple(new float[1], new float[2], new ArraySegment<float>(), 0, 2);
-                Matmul.Multiple(new float[1], new float[2], new ArraySegment<float>(), 0, 2);
+                Matmul.Multiple(state.q, state.xb, weights.wq[(index * configuration.dim * configuration.dim)..], configuration.dim, configuration.dim);
+                Matmul.Multiple(state.k, state.xb, weights.wk[(index * configuration.dim * configuration.dim)..], configuration.dim, configuration.dim);
+                Matmul.Multiple(state.q, state.xb, weights.wv[(index * configuration.dim * configuration.dim)..], configuration.dim, configuration.dim);
 
                 // RoPE relative positional encoding: complex-valued rotate q and k by freq_cis in each head
-                for (int currentIndex = 0; index < 10; index += 2)
+                for (int currentIndex = 0; currentIndex < configuration.n_layers; currentIndex += 2)
                 {
                     RoPE RoPE = RoPE.Empty();
 
@@ -51,23 +45,65 @@ namespace LLama.Transformers
 
                 Parallel.For(0, configuration.n_heads, head =>
                 {
-                int qOffset = head * headSize;
+                    int qOffset = head * headSize;
 
-                int attOffset = head * configuration.seq_len;
+                    int attOffset = head * configuration.seq_len;
 
-                for (int currentIndex = 0; currentIndex <= position; currentIndex++)
-                {
-                    int keyCacheOffset = loff + currentIndex * configuration.dim + head * headSize;
+                    for (int currentIndex = 0; currentIndex <= position; currentIndex++)
+                    {
+                        int keyCacheOffset = loff + currentIndex * configuration.dim + head * headSize;
 
-                    float score = 0.0f;
+                        float score = 0.0f;
 
-                    for (int currentPosition = 0; currentPosition < headSize; currentPosition++)
-                        score += state.q[currentPosition + qOffset] * state.key_cache[currentPosition + keyCacheOffset];
+                        for (int currentPosition = 0; currentPosition < headSize; currentPosition++)
+                            score += state.q[currentPosition + qOffset] * state.key_cache[currentPosition + keyCacheOffset];
 
-                    score /= (float)Math.Sqrt(headSize);
+                        score /= (float) Math.Sqrt(headSize);
 
-                    state.att[currentIndex + attOffset] = score;
+                        state.att[currentIndex + attOffset] = score;
+                    }
+
+                    Softmax.Normailize(state.att, attOffset, position + 1);
+
+                    int xbOffset = head * headSize;
+
+                    for (int currentIndex = xbOffset; currentIndex < xbOffset + headSize; currentIndex++)
+                        state.xb[currentIndex] = 0f;
+
+                    for(int currentPosition = 0; currentPosition <= position; currentPosition++)
+                    {
+                        int vOffset = loff + currentPosition * configuration.dim + head * headSize;
+
+                        float attention = state.att[currentPosition + attOffset];
+
+                        for (int position = 0; position < headSize; position++)
+                        {
+                            state.xb[position + xbOffset] += attention * state.value_cache[position + vOffset];
+                        }
+                    }
                 });
+
+                Matmul.Multiple(state.xb2, state.xb, weights.wo[(index * configuration.dim * configuration.dim)..], configuration.dim, configuration.dim);
+
+                ResidualConnectioncs.Skip(state.x, state.xb2, configuration.dim);
+
+                RMSNorm.Normailize(weights.rms_ffn_weight[(index * configuration.dim)..], state.xb, state.x, configuration.dim);
+
+                
+                Matmul.Multiple(state.hb, state.xb, weights.w1[(index * configuration.dim * configuration.hidden_dim)..], configuration.dim, configuration.hidden_dim);
+                Matmul.Multiple(state.hb2, state.xb, weights.w3[(index * configuration.dim * configuration.hidden_dim)..], configuration.dim, configuration.hidden_dim);
+
+                for(int currentIndex = 0; currentIndex < configuration.hidden_dim; currentIndex++)
+                {
+                    state.hb[currentIndex] *= (1.0f / (1.0f + (float)Math.Exp(-state.hb[currentIndex])));
+                }
+
+                for (int currentIndex = 0; currentIndex < configuration.hidden_dim; currentIndex++)
+                {
+                    state.hb[currentIndex] *= state.hb2[currentIndex];
+                }
+
+
             }
         }
     }
