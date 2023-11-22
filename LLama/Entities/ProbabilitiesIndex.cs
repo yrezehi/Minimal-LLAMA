@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LLama.Entities
 {
-    internal class ProbabilitiesIndex
+    public class ProbabilitiesIndex
     {
         public float Probability;
         public int Index;

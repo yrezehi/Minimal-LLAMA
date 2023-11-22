@@ -9,7 +9,7 @@ namespace LLama.Extensions
 {
     public static class ProbabilitiesIndexExtensions
     {
-        public static int Comparer(this ProbabilitiesIndex firstIndex, ProbabilitiesIndex secondIndex)
+        public static int ProbabilitiesComparer(ProbabilitiesIndex firstIndex, ProbabilitiesIndex secondIndex)
         {
             if (firstIndex.Probability > secondIndex.Probability)
                 return -1;
