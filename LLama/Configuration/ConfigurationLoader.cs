@@ -21,7 +21,7 @@ namespace LLama.Native.Configuration.Native
             BinConfiguration configurationInstance;
 
             try {
-                BinConfiguration configurationInstance = (BinConfiguration)Marshal.PtrToStructure(handleGC.AddrOfPinnedObject(), typeof(BinConfiguration));
+                configurationInstance = (BinConfiguration)Marshal.PtrToStructure(handleGC.AddrOfPinnedObject(), typeof(BinConfiguration));
             } finally { handleGC.Free(); }
 
             configurationInstance.vocab_size = Math.Abs(configurationInstance.vocab_size);

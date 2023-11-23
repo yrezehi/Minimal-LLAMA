@@ -17,7 +17,7 @@ namespace LLama.Entities
         public float[] att; // buffer for scores/attention values (n_heads, seq_len)
         public float[] logits; // output logits
 
-        public ProbIndex[] probindex; // buffer used in top-p sampling
+        public ProbabilitiesIndex[] probindex; // buffer used in top-p sampling
 
         // kv cache
         public float[] key_cache; // (layer, seq_len, dim)

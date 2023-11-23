@@ -1,4 +1,5 @@
-﻿using LLama.Entities;
+﻿using LLama.Configuration;
+using LLama.Entities;
 using LLama.Memory;
 using LLama.Native.Configuration.Native;
 
@@ -6,7 +7,7 @@ namespace LLama.Models
 {
     public static class InitialWeights
     {
-        public static void Initialize(this MemoryFile file, ref ConfigurationLoader configuration, ref TransformerWeights weights, bool shareWeights)
+        public static void Initialize(this MemoryFile file, ref BinConfiguration configuration, ref TransformerWeights weights, bool shareWeights)
         {
             long offset = 0;
 
