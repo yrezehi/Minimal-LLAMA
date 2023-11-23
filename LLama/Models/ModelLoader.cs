@@ -18,6 +18,7 @@ namespace LLama.Models
             checkpoint.Initialize(ref configuration, ref transformerWeights, configuration.vocab_size > 0);
 
             Tokenizer tokenizer = Tokenizer.Create(configuration.vocab_size).Load();
+            State state = new State().Populate(configuration);
         }
     }
 }
