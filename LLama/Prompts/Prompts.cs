@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LLama.Prompts
+﻿namespace LLama.Prompts
 {
     public class Prompts
     {
         public string Prompt;
-
         public int[]? PromptTokens;
 
         public Prompts(string prompt) =>
@@ -17,5 +10,7 @@ namespace LLama.Prompts
        
         public static Prompts Create(string prompt) =>
             new Prompts(prompt);
+
+        public Prompts 
     }
 }
