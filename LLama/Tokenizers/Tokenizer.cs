@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace LLama.Tokenizer
+namespace LLama.Tokenizers
 {
     public class Tokenizer
     {
@@ -12,7 +12,8 @@ namespace LLama.Tokenizer
         private readonly string[] Vocab;
         private readonly float[] Scores;
 
-        private Tokenizer(int vocabSize) {
+        private Tokenizer(int vocabSize)
+        {
 
             if (File.Exists(DEFAULT_TOKENIZER_PATH))
             {
@@ -25,15 +26,12 @@ namespace LLama.Tokenizer
             VocabSize = vocabSize;
         }
 
-        private FileStream GetStream() =>
-            new FileStream(DEFAULT_TOKENIZER_PATH, FileMode.Open, FileAccess.Read);
-
-        private void LoadVocab()
+        public Tokenizer Load()
         {
-            using FileStream fileStream = this.GetStream();
+            using FileStream fileStream = new FileStream(DEFAULT_TOKENIZER_PATH, FileMode.Open, FileAccess.Read);
             using BinaryReader binaryReader = new BinaryReader(fileStream);
-            
-            for(int index = 0; index < VocabSize; index++)
+
+            for (int index = 0; index < VocabSize; index++)
             {
                 Scores[index] = binaryReader.ReadSingle();
 
@@ -44,10 +42,11 @@ namespace LLama.Tokenizer
 
                 Vocab[index] = Encoding.UTF8.GetString(stackBuffer);
             }
+
+            return this;
         }
-       
+
         public static Tokenizer Create(int vocabSize) =>
             new Tokenizer(vocabSize);
-
     }
 }

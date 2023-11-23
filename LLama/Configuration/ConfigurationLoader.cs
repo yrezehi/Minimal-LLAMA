@@ -1,10 +1,10 @@
 ﻿using System.Runtime.InteropServices;
-using LLama.Configuration;
 using LLama.Extensions;
 
-namespace LLama.Native.Configuration.Native
+namespace LLama.Configuration
 {
-	public static class ConfigurationLoader {
+    public static class ConfigurationLoader
+    {
 
         public static BinConfiguration Load(string path)
         {
@@ -20,9 +20,11 @@ namespace LLama.Native.Configuration.Native
 
             BinConfiguration configurationInstance;
 
-            try {
+            try
+            {
                 configurationInstance = (BinConfiguration)Marshal.PtrToStructure(handleGC.AddrOfPinnedObject(), typeof(BinConfiguration));
-            } finally { handleGC.Free(); }
+            }
+            finally { handleGC.Free(); }
 
             configurationInstance.vocab_size = Math.Abs(configurationInstance.vocab_size);
 

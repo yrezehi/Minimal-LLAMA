@@ -1,7 +1,8 @@
 ﻿using LLama.Configuration;
+using LLama.Entities;
 using LLama.Extensions;
 using LLama.Memory;
-using LLama.Native.Configuration.Native;
+using LLama.Tokenizers;
 
 namespace LLama.Models
 {
@@ -10,9 +11,13 @@ namespace LLama.Models
         public static void Load(string path)
         {
             BinConfiguration configuration = ConfigurationLoader.Load(path);
-            MemoryFile fileLoader = MemoryFile.Load(path, configuration.GetBytesSize());
+            MemoryFile checkpoint = MemoryFile.Load(path, configuration.GetBytesSize());
 
+            TransformerWeights transformerWeights = new TransformerWeights();
 
+            checkpoint.Initialize(ref configuration, ref transformerWeights, configuration.vocab_size > 0);
+
+            Tokenizer tokenizer = Tokenizer.Create(configuration.vocab_size).Load();
         }
     }
 }

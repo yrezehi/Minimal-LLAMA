@@ -9,7 +9,7 @@ namespace LLama.Memory
     {
         private readonly MemoryMappedViewAccessor ViewAccessor;
 
-        private MemoryFile(string modelPath)
+        private MemoryFile(string modelPath, long configurationSize)
         {
             if (File.Exists(modelPath))
             {
@@ -19,11 +19,11 @@ namespace LLama.Memory
             var fileStream = new FileStream(modelPath, FileMode.Open, FileAccess.Read);
 
             ViewAccessor = MemoryMappedFile.CreateFromFile(fileStream, null, fileStream.Length, MemoryMappedFileAccess.Read, HandleInheritability.None, false).
-                CreateViewAccessor(null, null, MemoryMappedFileAccess.Read);
+                CreateViewAccessor(configurationSize, fileStream.Length - configurationSize, MemoryMappedFileAccess.Read);
         }
 
-        public static MemoryFile Load(string pathFile) =>
-            new MemoryFile(pathFile);
+        public static MemoryFile Load(string pathFile, long configurationSize) =>
+            new MemoryFile(pathFile, configurationSize);
 
         public float[] Read(ref long offset, int size)
         {
