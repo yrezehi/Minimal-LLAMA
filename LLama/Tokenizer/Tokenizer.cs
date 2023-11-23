@@ -10,7 +10,7 @@ namespace LLama.Tokenizer
         private int VocabSize;
 
         private readonly string[] Vocab;
-        private readonly string[] Scores;
+        private readonly float[] Scores;
 
         private Tokenizer(int vocabSize) {
 
@@ -19,10 +19,10 @@ namespace LLama.Tokenizer
                 throw new FileNotFoundException("Couldn't find the tokenizer at: " + DEFAULT_TOKENIZER_PATH);
             }
 
-            VocabSize = vocabSize;
+            Vocab = new string[vocabSize];
+            Scores = new float[vocabSize];
 
-            Vocab = new string[VocabSize];
-            Scores = new string[VocabSize];
+            VocabSize = vocabSize;
         }
 
         private FileStream GetStream() =>
@@ -35,7 +35,7 @@ namespace LLama.Tokenizer
             
             for(int index = 0; index < VocabSize; index++)
             {
-                Vocab[index] = binaryReader.ReadSingle();
+                Scores[index] = binaryReader.ReadSingle();
 
                 int length = binaryReader.ReadInt32();
 

@@ -1,4 +1,5 @@
-﻿using LLama.Entities;
+﻿using LLama.Configuration;
+using LLama.Entities;
 using LLama.Layers;
 using LLama.Native.Configuration.Native;
 
@@ -6,7 +7,7 @@ namespace LLama.Transformers
 {
     public class Transformer
     {
-        public static void Transform(ConfigurationLoader configuration, TransformerWeights weights, State state, int token, int position)
+        public static void Transform(BinConfiguration configuration, TransformerWeights weights, State state, int token, int position)
         {
             int headSize = configuration.dim / configuration.n_heads;
 
