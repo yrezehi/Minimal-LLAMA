@@ -1,6 +1,7 @@
 ﻿using LLama.Configuration;
 using LLama.Entities;
 using LLama.Extensions;
+using LLama.Layers;
 using LLama.Memory;
 using LLama.Prompts;
 using LLama.Tokenizers;
@@ -54,8 +55,37 @@ namespace LLama.Models
                     nextState = promptInstance.PromptTokens[sequencePosition];
                 } else
                 {
+                    if(InferenceConfiguration.Temperature == 0.0f)
+                    {
+                    } else
+                    {
+                        for (int index = 0; index < Configuration.vocab_size; index++)
+                        {
+                            State.logits[index] /= InferenceConfiguration.Temperature;
+                        }
 
+                        Softmax.Normailize(State.logits, 0, Configuration.vocab_size);
+
+                        if(InferenceConfiguration.Topp <= 0)
+                        {
+                            nextState = NucleusSampling.SampleTopp(State.logits, Configuration.vocab_size);
+                        } else
+                        {
+                            nextState = NucleusSampling.SampleTopp(State.logits, Configuration.vocab_size, InferenceConfiguration.Topp, State.probindex);
+                        }
+                    }
                 }
+
+                sequencePosition++;
+
+                if (nextState == 1)
+                    break;
+
+                string decodedToken = ( token == 1 && Tokenizer.Vocab[nextState][0] == ' ' ? Tokenizer.Vocab[nextState].TrimStart() : Tokenizer.Vocab[nextState]);
+
+                token = nextState;
+
+                return decodedToken;
             }
         }
     }

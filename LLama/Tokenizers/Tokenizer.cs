@@ -9,8 +9,8 @@ namespace LLama.Tokenizers
         private int MaxLength;
         private int VocabSize;
 
-        private readonly string[] Vocab;
-        private readonly float[] Scores;
+        public readonly string[] Vocab;
+        public readonly float[] Scores;
 
         private Tokenizer(int vocabSize)
         {

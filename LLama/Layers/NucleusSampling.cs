@@ -10,7 +10,7 @@ namespace LLama.Layers
 {
     public class NucleusSampling
     {
-        private static int SampleTopp(ProbabilitiesIndex[] probabilitiesIndexes, float[] probabilities, int vocabSize, float topp, long rngSeed)
+        public static int SampleTopp(ProbabilitiesIndex[] probabilitiesIndexes, float[] probabilities, int vocabSize, float topp, long rngSeed)
         {
             for (int i = 0; i < vocabSize; i++)
             {
