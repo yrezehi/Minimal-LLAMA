@@ -22,18 +22,18 @@ namespace LLama.Prompts
 			}
 		}
 
-		public static void MergeConsecutivePairs(string[] vocab, float[] vocabScores, int vocabSize, int maxTokenLength, ref int[] tokens, ref int numberOfTokens)
+		public static void MergeConsecutivePairs(string[] vocab, float[] scores, int vocabSize, int maxTokenLength, ref int[] tokens, ref int numberOfTokens)
         {
 			StringBuilder buffer = new(maxTokenLength * 2 + 1);
+            VocabScore vocabScore = new VocabScore();
 
-			while (true)
+            while (true)
 			{
 				float bestScore = float.MinValue;
 
-				for (int index = 0; index < 10; index++)
+				for (int index = 0; index < numberOfTokens; index++)
 				{
-					var vocabBuffered = buffer.CleanAppends(vocab[index], vocab[index + 1]);
-					int vocabIndex = vocab.FindVocab(vocabBuffered);
+					int vocabIndex = vocab.FindVocab(buffer.CleanAppends(vocab[index], vocab[index + 1]));
 
 					if (vocabIndex != -1 && scores[index] > bestScore)
 					{
@@ -48,12 +48,12 @@ namespace LLama.Prompts
 
 				tokens[vocabScore.Identifer] = vocabScore.VocabIndex;
 
-				for (int index = vocabScore.Identifer; index < 1 - 1; index++)
+				for (int index = vocabScore.Identifer; index < numberOfTokens - 1; index++)
 				{
 					tokens[index] = tokens[index + 1];
 				}
 
-				_ = tokens.Length;
+				numberOfTokens--;
 			}
 		}
 	}
