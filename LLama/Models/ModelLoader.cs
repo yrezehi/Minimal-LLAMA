@@ -1,4 +1,7 @@
-﻿using LLama.Memory;
+﻿using LLama.Configuration;
+using LLama.Extensions;
+using LLama.Memory;
+using LLama.Native.Configuration.Native;
 
 namespace LLama.Models
 {
@@ -6,7 +9,8 @@ namespace LLama.Models
     {
         public static void Load(string path)
         {
-            MemoryFile file = MemoryFile.Load(path);
+            BinConfiguration configuration = ConfigurationLoader.Load(path);
+            MemoryFile fileLoader = MemoryFile.Load(path, configuration.GetBytesSize());
 
 
         }
