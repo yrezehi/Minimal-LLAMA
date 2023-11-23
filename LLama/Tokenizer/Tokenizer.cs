@@ -28,7 +28,7 @@ namespace LLama.Tokenizer
         private FileStream GetStream() =>
             new FileStream(DEFAULT_TOKENIZER_PATH, FileMode.Open, FileAccess.Read);
 
-        private void loadVocab()
+        private void LoadVocab()
         {
             using FileStream fileStream = this.GetStream();
             using BinaryReader binaryReader = new BinaryReader(fileStream);

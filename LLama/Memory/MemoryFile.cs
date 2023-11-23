@@ -22,7 +22,7 @@ namespace LLama.Memory
                 CreateViewAccessor(null, null, MemoryMappedFileAccess.Read);
         }
 
-        public static MemoryFile Create(string pathFile) =>
+        public static MemoryFile Load(string pathFile) =>
             new MemoryFile(pathFile);
 
         public float[] Read(ref long offset, int size)

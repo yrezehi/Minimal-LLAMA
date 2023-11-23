@@ -6,7 +6,7 @@ namespace LLama.Transformers
 {
     public class Transformer
     {
-        public static void Transform(NativeConfiguration configuration, TransformerWeights weights, State state, int token, int position)
+        public static void Transform(ConfigurationLoader configuration, TransformerWeights weights, State state, int token, int position)
         {
             int headSize = configuration.dim / configuration.n_heads;
 
