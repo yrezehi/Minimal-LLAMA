@@ -39,6 +39,7 @@ namespace LLama.Models
         public void Inference(string prompt)
         {
             Prompt promptInstance = new Prompt(prompt);
+            PromptEncoder.Encode(promptInstance, Tokenizer.Vocab, Tokenizer.Scores, Tokenizer.VocabSize, Tokenizer.MaxLength, ref promptInstance.Tokens, ref promptInstance.NumberOfTokens);
             
             int sequencePosition = 0;
             int token = 0;
@@ -49,9 +50,9 @@ namespace LLama.Models
 
                 int nextState;
 
-                if(sequencePosition < promptInstance.PromptTokensNumber)
+                if(sequencePosition < promptInstance.NumberOfTokens)
                 {
-                    nextState = promptInstance.PromptTokens[sequencePosition++];
+                    nextState = promptInstance.Tokens[sequencePosition++];
                 } else
                 {
                     if(InferenceConfiguration.Temperature == 0.0f)

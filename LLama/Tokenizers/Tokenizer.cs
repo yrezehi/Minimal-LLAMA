@@ -1,13 +1,14 @@
-﻿using System.Text;
+﻿using System.Reflection.PortableExecutable;
+using System.Text;
 
 namespace LLama.Tokenizers
 {
     public class Tokenizer
     {
-        private readonly static string DEFAULT_TOKENIZER_PATH = "tokenizer/tokenizer.bin";
+        private readonly static string DEFAULT_TOKENIZER_PATH = "Tokenizers/bin/tokenizer.bin";
 
-        private int MaxLength;
-        private int VocabSize;
+        public int MaxLength;
+        public int VocabSize;
 
         public readonly string[] Vocab;
         public readonly float[] Scores;
@@ -15,7 +16,7 @@ namespace LLama.Tokenizers
         private Tokenizer(int vocabSize)
         {
 
-            if (File.Exists(DEFAULT_TOKENIZER_PATH))
+            if (!File.Exists(DEFAULT_TOKENIZER_PATH))
             {
                 throw new FileNotFoundException("Couldn't find the tokenizer at: " + DEFAULT_TOKENIZER_PATH);
             }
@@ -28,19 +29,22 @@ namespace LLama.Tokenizers
 
         public Tokenizer Load()
         {
-            using FileStream fileStream = new FileStream(DEFAULT_TOKENIZER_PATH, FileMode.Open, FileAccess.Read);
-            using BinaryReader binaryReader = new BinaryReader(fileStream);
-
-            for (int index = 0; index < VocabSize; index++)
+            using (FileStream fileStream = new FileStream(DEFAULT_TOKENIZER_PATH, FileMode.Open, FileAccess.Read))
+            using (BinaryReader binaryReader = new BinaryReader(fileStream))
             {
-                Scores[index] = binaryReader.ReadSingle();
+                MaxLength = binaryReader.ReadInt32();
 
-                int length = binaryReader.ReadInt32();
+                for (int index = 0; index < VocabSize; index++)
+                {
+                    Scores[index] = binaryReader.ReadSingle();
 
-                Span<byte> stackBuffer = stackalloc byte[length];
-                _ = binaryReader.Read(stackBuffer);
+                    int length = binaryReader.ReadInt32();
 
-                Vocab[index] = Encoding.UTF8.GetString(stackBuffer);
+                    Span<byte> stackBuffer = stackalloc byte[length];
+                    _ = binaryReader.Read(stackBuffer);
+
+                    Vocab[index] = Encoding.UTF8.GetString(stackBuffer);
+                }
             }
 
             return this;

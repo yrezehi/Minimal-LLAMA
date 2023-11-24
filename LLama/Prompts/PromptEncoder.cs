@@ -6,13 +6,13 @@ namespace LLama.Prompts
 {
 	public static class PromptEncoder
 	{
-		public static void Encode(this string prompt, string[] vocab, float[] vocabScores, int vocabSize, int maxTokenLength, ref int[] tokens, ref int numberOfTokens)
+		public static void Encode(this Prompt prompt, string[] vocab, float[] vocabScores, int vocabSize, int maxTokenLength, ref int[] tokens, ref int numberOfTokens)
 		{
             numberOfTokens = 0;
 
-            for (int index = 0; index < prompt.Length; index++)
+            for (int index = 0; index < prompt.Context.Length; index++)
 			{
-				int vocabIndex = vocab.FindVocab(prompt.ElementAt(index).ToString());
+				int vocabIndex = vocab.FindVocab(prompt.Context.ElementAt(index).ToString());
 			
 				if (vocabIndex == -1)
 				{

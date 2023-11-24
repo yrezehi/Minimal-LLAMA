@@ -18,7 +18,7 @@ namespace LLama.Models
             weights.wv = file.Read(ref offset, configuration.n_layers * configuration.dim * configuration.dim);
             weights.wo = file.Read(ref offset, configuration.n_layers * configuration.dim * configuration.dim);
             
-            weights.rms_ffn_weight = file.Read(ref offset, configuration.n_layers * configuration.dim * configuration.dim);
+            weights.rms_ffn_weight = file.Read(ref offset, configuration.n_layers * configuration.dim);
            
             weights.w1 = file.Read(ref offset, configuration.n_layers * configuration.dim * configuration.hidden_dim);
             weights.w2 = file.Read(ref offset, configuration.n_layers * configuration.hidden_dim * configuration.dim);

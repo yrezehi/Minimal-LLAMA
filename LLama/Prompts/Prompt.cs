@@ -4,12 +4,15 @@
     {
         public string Context;
         
-        public int[] PromptTokens;
-        public int PromptTokensNumber;
+        public int[] Tokens;
+        public int NumberOfTokens;
 
-        public Prompt(string prompt) =>
-            (Context, PromptTokens) = (prompt, new int[prompt.Length]);
-       
+        public Prompt(string prompt)
+        {
+            Context = prompt; 
+            Tokens = new int[prompt.Length];
+        }
+
         public static Prompt Create(string prompt) =>
             new Prompt(prompt);
     }
