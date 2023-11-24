@@ -12,12 +12,13 @@ namespace LLama.Prompts
 
             for (int index = 0; index < prompt.Context.Length; index++)
 			{
-				int vocabIndex = vocab.FindVocab(prompt.Context.ElementAt(index).ToString());
+				int vocabIndex = vocab.FindVocab(prompt.Context.ElementAt(index).ToString(), vocabSize);
 			
 				if (vocabIndex == -1)
 				{
 					throw new ArgumentException("Couldn't find vocab for: " + prompt);
 				}
+
 				tokens[numberOfTokens++] = vocabIndex;
 			}
 		}
@@ -33,7 +34,7 @@ namespace LLama.Prompts
 
 				for (int index = 0; index < numberOfTokens; index++)
 				{
-					int vocabIndex = vocab.FindVocab(buffer.CleanAppends(vocab[index], vocab[index + 1]));
+					int vocabIndex = vocab.FindVocab(buffer.CleanAppends(vocab[index], vocab[index + 1]), vocabSize);
 
 					if (vocabIndex != -1 && scores[index] > bestScore)
 					{

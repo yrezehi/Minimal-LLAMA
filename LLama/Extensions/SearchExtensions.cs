@@ -2,32 +2,38 @@
 {
 	public static class SearchExtensions
 	{
-		public static int TernarySearch<T>(this T[] array, int left, int right, T value) where T : IComparable<T>
-		{
+		public static int TernarySearch(this string[] array, string target, int left, int right)
+        {
             if (right >= left)
             {
-                int midLeft = left + (right - left) / 3;
-                int midRight = right - (right - left) / 3;
+                int mid1 = left + (right - left) / 3;
+                int mid2 = right - (right - left) / 3;
 
-                if (EqualityComparer<T>.Default.Equals(array[midLeft], value))
-                    return midLeft;
-                else if (EqualityComparer<T>.Default.Equals(array[midRight], value))
-                    return midRight;
-
-                if (value.CompareTo(array[midLeft]) > 0)
+                if (array[mid1] == target)
                 {
-                    return array.TernarySearch(midLeft + 1, right, value);
+                    return mid1;
                 }
-                else if (value.CompareTo(array[midLeft]) < 0)
+
+                if (array[mid2] == target)
                 {
-                    return array.TernarySearch(left, midLeft - 1, value);
+                    return mid2;
+                }
+
+                if (string.Compare(target, array[mid1]) < 0)
+                {
+                    return array.TernarySearch(target, left, mid1 - 1);
+                }
+                else if (string.Compare(target, array[mid2]) > 0)
+                {
+                    return array.TernarySearch(target, mid2 + 1, right);
                 }
                 else
                 {
-                    return array.TernarySearch(midLeft + 1, midRight - 1, value);
+                    return array.TernarySearch(target, mid1 + 1, mid2 - 1);
                 }
             }
+
             return -1;
         }
-	}
+    }
 }
