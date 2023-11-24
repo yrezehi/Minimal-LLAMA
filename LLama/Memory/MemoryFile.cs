@@ -11,7 +11,7 @@ namespace LLama.Memory
 
         private MemoryFile(string modelPath, long configurationSize)
         {
-            if (File.Exists(modelPath))
+            if (!File.Exists(modelPath))
             {
                 throw new FileNotFoundException("Couldn't find the file at: " + modelPath);
             }

@@ -1,6 +1,6 @@
 ﻿namespace LLama.Prompts.Entities
 {
-	public struct VocabScore
+	public class VocabScore
 	{
 		public int Identifer = -1;
 		public float HighestScore = float.MinValue;

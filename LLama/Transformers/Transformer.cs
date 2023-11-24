@@ -1,7 +1,6 @@
 ﻿using LLama.Configuration;
 using LLama.Entities;
 using LLama.Layers;
-using LLama.Native.Configuration.Native;
 
 namespace LLama.Transformers
 {

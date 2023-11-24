@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Tokenizers\bin\tokenizer.bin" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Tokenizers\bin\tokenizer.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

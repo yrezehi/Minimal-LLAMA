@@ -10,6 +10,24 @@ namespace LLama.Layers
 {
     public class NucleusSampling
     {
+        public static int Sample(float[] probabilities, int vocabSize, long rngSeed)
+        {
+            float random = RandomF32(rngSeed);
+            float cdf = 0.0f;
+
+            for(int index = 0; index < vocabSize; index++)
+            {
+                cdf += probabilities[index];
+                
+                if(random < cdf)
+                {
+                    return index;
+                }
+            }
+
+            return vocabSize - 1;
+        }
+
         public static int SampleTopp(ProbabilitiesIndex[] probabilitiesIndexes, float[] probabilities, int vocabSize, float topp, long rngSeed)
         {
             for (int i = 0; i < vocabSize; i++)

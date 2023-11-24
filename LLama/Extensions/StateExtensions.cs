@@ -21,6 +21,8 @@ namespace LLama.Extensions
             state.probindex = new ProbabilitiesIndex[configuration.vocab_size];
             state.key_cache = new float[configuration.n_layers * configuration.seq_len * configuration.dim];
             state.value_cache = new float[configuration.n_layers * configuration.seq_len * configuration.dim];
+
+            return state;
         }
     }
 }

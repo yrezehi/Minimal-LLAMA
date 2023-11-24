@@ -6,7 +6,6 @@ using LLama.Memory;
 using LLama.Prompts;
 using LLama.Tokenizers;
 using LLama.Transformers;
-using System.IO;
 
 namespace LLama.Models
 {
@@ -14,11 +13,11 @@ namespace LLama.Models
     {
 
         private BinConfiguration Configuration;
-        private MemoryFile Checkpoint;
+        private readonly MemoryFile Checkpoint;
 
         private TransformerWeights TransformerWeights;
 
-        private Tokenizer Tokenizer;
+        private readonly Tokenizer Tokenizer;
         private State State;
 
         private ModelLoader(string path)
@@ -52,11 +51,12 @@ namespace LLama.Models
 
                 if(sequencePosition < promptInstance.PromptTokensNumber)
                 {
-                    nextState = promptInstance.PromptTokens[sequencePosition];
+                    nextState = promptInstance.PromptTokens[sequencePosition++];
                 } else
                 {
                     if(InferenceConfiguration.Temperature == 0.0f)
                     {
+                        nextState = Argmax.Maximum(State.logits, Configuration.vocab_size);
                     } else
                     {
                         for (int index = 0; index < Configuration.vocab_size; index++)
@@ -68,15 +68,13 @@ namespace LLama.Models
 
                         if(InferenceConfiguration.Topp <= 0)
                         {
-                            nextState = NucleusSampling.SampleTopp(State.logits, Configuration.vocab_size);
+                            nextState = NucleusSampling.Sample(State.logits, Configuration.vocab_size, InferenceConfiguration.Seed);
                         } else
                         {
-                            nextState = NucleusSampling.SampleTopp(State.logits, Configuration.vocab_size, InferenceConfiguration.Topp, State.probindex);
+                            nextState = NucleusSampling.SampleTopp(State.probindex, State.logits, Configuration.vocab_size, InferenceConfiguration.Topp, InferenceConfiguration.Seed);
                         }
                     }
                 }
-
-                sequencePosition++;
 
                 if (nextState == 1)
                     break;
@@ -85,7 +83,7 @@ namespace LLama.Models
 
                 token = nextState;
 
-                return decodedToken;
+                Console.Write(decodedToken);
             }
         }
     }
